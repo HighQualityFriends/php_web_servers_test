@@ -1,0 +1,13 @@
+.git/
+.gitignore
+.gitattributes
+.idea/
+tests/
+*/docker-stack
+*/nginx.conf
+Dockerfile
+bin/
+phpunit.xml
+Makefile
+README
+

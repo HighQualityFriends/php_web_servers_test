@@ -1,0 +1,57 @@
+version: "3.3"
+configs:
+  gateway_config:
+    file: nginx.conf
+services:
+  gateway:
+    image: nginx:1.13.0-alpine
+    configs:
+    - source: gateway_config
+      target: /etc/nginx/nginx.conf
+      mode: 0444
+    ports:
+    - 10000:80
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: 2
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 30s
+        max_attempts: 5
+        window: 60s
+      update_config:
+        parallelism: 1
+        delay: 5s
+        failure_action: pause
+        monitor: 20s
+        max_failure_ratio: 0.1
+  app:
+    image: localhost:5000/webserverstest_reactphp:test
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: 2
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 30s
+        max_attempts: 0
+        window: 60s
+      update_config:
+        parallelism: 1
+        delay: 5s
+        failure_action: pause
+        monitor: 20s
+        max_failure_ratio: 0.1
+      resources:
+        limits:
+          cpus: "1"
+          memory: 50M

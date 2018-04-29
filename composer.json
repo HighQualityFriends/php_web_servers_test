@@ -1,0 +1,7 @@
+{
+  "name": "hqf/webserverstest",
+  "type": "project",
+  "require": {
+    "react/http": "^0.8.3"
+  }
+}
