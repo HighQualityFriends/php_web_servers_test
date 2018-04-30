@@ -32,12 +32,15 @@ services:
         max_failure_ratio: 0.1
   app:
     image: localhost:5000/webserverstest_reactphp:test
+    environment:
+      - INSTANCE_ID="{{.Task.Slot}}"
     logging:
       driver: json-file
       options:
         max-size: 10m
         max-file: 2
     deploy:
+      endpoint_mode: dnsrr
       mode: replicated
       replicas: 1
       restart_policy:
