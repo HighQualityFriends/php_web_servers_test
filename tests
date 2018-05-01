@@ -1,1 +1,3 @@
-docker run --rm --net host wrk williamyeh/wrk:4.0.2 -t10 -c200 -d10s http://192.168.99.100:10000
+docker run --rm --net host williamyeh/wrk:4.0.2 -t500 -c1800 -d10s http://192.168.99.100:10000
+docker run --rm --net host williamyeh/wrk:4.0.2 -t500 -c1800 -d10s http://192.168.99.100:10001
+docker run --rm --net host williamyeh/wrk:4.0.2 -t500 -c1800 -d10s http://192.168.99.100:20000/reactphp
