@@ -1,0 +1,50 @@
+global
+    pidfile /var/run/haproxy.pid
+    nbproc  2
+    cpu-map  1 1
+    cpu-map  2 2
+    tune.ssl.default-dh-param 2048{{.ExtraGlobal}}
+
+    # disable sslv3, prefer modern ciphers
+    ssl-default-bind-options {{.SslBindOptions}}
+    ssl-default-bind-ciphers {{.SslBindCiphers}}
+
+    ssl-default-server-options {{.SslBindOptions}}
+    ssl-default-server-ciphers {{.SslBindCiphers}}
+
+resolvers docker
+{{- range .Resolvers}}
+    {{.}}
+{{- end}}
+
+defaults
+    mode    tcp
+    balance roundrobin
+{{.ExtraDefaults}}
+    option  {{.ConnectionMode}}
+    option  forwardfor
+    option  redispatch
+
+    errorfile 400 /errorfiles/400.http
+    errorfile 403 /errorfiles/403.http
+    errorfile 405 /errorfiles/405.http
+    errorfile 408 /errorfiles/408.http
+    errorfile 429 /errorfiles/429.http
+    errorfile 500 /errorfiles/500.http
+    errorfile 502 /errorfiles/502.http
+    errorfile 503 /errorfiles/503.http
+    errorfile 504 /errorfiles/504.http
+
+    maxconn 10000
+    timeout connect {{.TimeoutConnect}}s
+    timeout client  {{.TimeoutClient}}s
+    timeout server  {{.TimeoutServer}}s
+    timeout queue   {{.TimeoutQueue}}s
+    timeout tunnel  {{.TimeoutTunnel}}s
+    timeout http-request {{.TimeoutHttpRequest}}s
+    timeout http-keep-alive {{.TimeoutHttpKeepAlive}}s
+{{.UserList}}
+{{.Stats}}
+frontend services{{.DefaultBinds}}
+    mode {{.DefaultReqMode}}
+{{.ExtraFrontend}}{{.ContentFrontend}}{{.ContentFrontendTcp}}{{.ContentFrontendSNI}}

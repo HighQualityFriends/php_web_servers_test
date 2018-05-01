@@ -1,0 +1,6 @@
+{{range $sd := .ServiceDest}}
+    backend {{$.AclName}}-be{{.Port}}_{{.Index}}
+    mode http
+    balance roundrobin
+	server-template {{$.ServiceName}} 1-10 {{$.ServiceName}}:{{.Port}} maxconn 40 check resolvers docker
+{{end}}

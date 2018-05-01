@@ -1,0 +1,4 @@
+{{range $sd := .ServiceDest}}
+    acl url_{{$.AclName}}{{.Port}}_{{.Index}}{{range .ServicePath}} path_beg {{.}} {{end}}
+    use_backend {{$.AclName}}-be{{.Port}}_{{.Index}} if url_{{$.AclName}}{{.Port}}_{{.Index}}
+{{end}}
