@@ -5,27 +5,32 @@ use React\Http\Middleware\LimitConcurrentRequestsMiddleware;
 use React\Http\Middleware\RequestBodyBufferMiddleware;
 use React\Http\Middleware\RequestBodyParserMiddleware;
 use React\Http\Response;
-use React\Http\Server;
 use React\Http\StreamingServer;
 
 require "vendor/autoload.php";
 
 $loop = React\EventLoop\Factory::create();
-
 $instanceId = getenv("INSTANCE_ID");
 $server = new StreamingServer([
-    new LimitConcurrentRequestsMiddleware(20),
-    new RequestBodyBufferMiddleware(2 * 1024 * 1024),
+    new LimitConcurrentRequestsMiddleware(10),
+    new RequestBodyBufferMiddleware(5 * 1024 * 1024),
     new RequestBodyParserMiddleware(),
     new LimitConcurrentRequestsMiddleware(1),
     function (ServerRequestInterface $request) use ($instanceId) {
-        file_put_contents("php://stdout", date("H:i:s") . " got request\n");
-        return new Response(200, ['Content-Type' => 'text/plain'], "Hello World! from $instanceId\n");
+        return new Response(200, ['Content-Type' => 'text/plain'], "Hello from instance: $instanceId\n");
     }
 ]);
 
-file_put_contents("php://stdout", $instanceId . " starting server...\n");
+$socket = new React\Socket\Server("0.0.0.0:9000", $loop, [
+    "tcp_nodelay" => true,
+    "backlog" => 50
+]);
 
-$socket = new React\Socket\Server("0.0.0.0:9000", $loop);
+$loop->addSignal(SIGTERM, $func = function ($signal) use ($loop, &$func) {
+    file_put_contents("php://stdout", "got SIGTERM stoping loop...");
+    $loop->removeSignal(SIGINT, $func);
+    $loop->stop();
+});
+
 $server->listen($socket);
 $loop->run();

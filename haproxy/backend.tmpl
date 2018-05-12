@@ -1,0 +1,5 @@
+{{range $sd := .ServiceDest}}
+    backend {{$.AclName}}-be{{.Port}}_{{.Index}}
+    mode http
+	server-template {{$.ServiceName}} 5 {{$.ServiceName}}:{{.Port}} maxconn 50 resolvers docker check inter 2000 downinter 1000 fastinter 1000
+{{end}}

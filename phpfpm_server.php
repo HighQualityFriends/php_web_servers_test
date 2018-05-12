@@ -2,4 +2,5 @@
 
 require "vendor/autoload.php";
 
-echo "Hello World!\n";
+$instanceId = getenv("INSTANCE_ID");
+echo "Hello from instance: $instanceId\n";

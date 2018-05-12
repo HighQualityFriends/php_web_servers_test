@@ -1,25 +1,33 @@
 global
-    pidfile /var/run/haproxy.pid
-    nbproc  2
-    cpu-map  1 1
-    cpu-map  2 2
-    tune.ssl.default-dh-param 2048{{.ExtraGlobal}}
+   pidfile /var/run/haproxy.pid
+   nbproc 1
+   nbthread 2
+   cpu-map auto:1/1-2 0-1
 
-    # disable sslv3, prefer modern ciphers
-    ssl-default-bind-options {{.SslBindOptions}}
-    ssl-default-bind-ciphers {{.SslBindCiphers}}
+   tune.ssl.default-dh-param 2048{{.ExtraGlobal}}
+   tune.bufsize 16384
+   # disable sslv3, prefer modern ciphers
+   ssl-default-bind-options {{.SslBindOptions}}
+   ssl-default-bind-ciphers {{.SslBindCiphers}}
 
-    ssl-default-server-options {{.SslBindOptions}}
-    ssl-default-server-ciphers {{.SslBindCiphers}}
+   ssl-default-server-options {{.SslBindOptions}}
+   ssl-default-server-ciphers {{.SslBindCiphers}}
+   maxconn 20000
 
 resolvers docker
 {{- range .Resolvers}}
     {{.}}
 {{- end}}
+    hold other           10s
+    hold refused         10s
+    hold nx              10s
+    hold timeout         10s
+    hold valid           20s
+    accepted_payload_size 8192
 
 defaults
-    mode    tcp
-    balance roundrobin
+    mode    http
+    balance static-rr
 {{.ExtraDefaults}}
     option  {{.ConnectionMode}}
     option  forwardfor
@@ -35,7 +43,6 @@ defaults
     errorfile 503 /errorfiles/503.http
     errorfile 504 /errorfiles/504.http
 
-    maxconn 10000
     timeout connect {{.TimeoutConnect}}s
     timeout client  {{.TimeoutClient}}s
     timeout server  {{.TimeoutServer}}s
@@ -43,6 +50,9 @@ defaults
     timeout tunnel  {{.TimeoutTunnel}}s
     timeout http-request {{.TimeoutHttpRequest}}s
     timeout http-keep-alive {{.TimeoutHttpKeepAlive}}s
+
+    maxconn 10000
+
 {{.UserList}}
 {{.Stats}}
 frontend services{{.DefaultBinds}}
