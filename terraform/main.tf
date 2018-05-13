@@ -32,7 +32,8 @@ resource "aws_instance" "web_server" {
       "sudo apt-get update",
       "sudo apt-get install -y docker-ce='18.05.0~ce~3-0~ubuntu'",
       "sudo docker swarm init",
-      "git clone --depth=1 https://github.com/HighQualityFriends/php_web_servers_test.git"
+      "sudo docker run -d -p 5000:5000 --name registry --restart always registry:2",
+      "git clone --depth=1 https://github.com/HighQualityFriends/php_web_servers_test.git",
     ]
   }
 }
