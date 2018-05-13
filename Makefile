@@ -4,6 +4,7 @@ export PROJECT = php_web_servers_test
 export IMAGE_NAMESPACE = localhost:5000
 export VERSION = test
 export APP_IMAGE=$(IMAGE_NAMESPACE)/$(PROJECT)_$*:$(VERSION)
+export DEPLOY_USER ?= ubuntu
 
 HELP_TARGET_MAX_CHAR_NUM=30
 SUBPROJECTS = reactphp_ev reactphp_event phpfpm
@@ -30,6 +31,9 @@ _subproject_deploy_image = $(call subprojects_target,deploy_image)
 ## Deploying selected subproject image
 $(_subproject_deploy_image): deploy_image_%:
 	$(call deploy_image,$(APP_IMAGE),$*/Dockerfile)
+
+install_vendors:
+	bash bin/test/install_vendors.sh
 
 ## Deploying subprojects images
 deploy_images: $(_subproject_deploy_image)

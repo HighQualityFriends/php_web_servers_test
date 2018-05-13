@@ -1,4 +1,6 @@
 .idea/
 vendor/
 .gtm/
-
+/terraform/terraform.tfstate
+/terraform/terraform.tfstate.backup
+/terraform/.terraform/
