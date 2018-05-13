@@ -5,10 +5,15 @@ resource "aws_security_group" "sg_php_web_servers_test" {
     from_port   = "0"
     to_port     = "0"
     protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
     self        = true
   }
 
+  ingress {
+    from_port   = "10000"
+    to_port     = "10000"
+    protocol    = "tcp"
+  }
+  
   ingress {
     from_port = 22
     to_port   = 22
