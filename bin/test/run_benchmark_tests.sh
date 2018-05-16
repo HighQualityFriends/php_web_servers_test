@@ -23,5 +23,5 @@ while read test_line; do
     benchmark_requests=${test_line[2]}
     dockerutil::print_note "Test timeout: $benchmark_timeout , concurrent_requests: $benchmark_concurrent_requests , requests: $benchmark_requests"
     run_benchmark $benchmark_timeout $benchmark_concurrent_requests $benchmark_requests
-    sleep 20
+    sleep 60
 done <${BENCHMARK_TESTS_FILE}

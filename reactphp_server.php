@@ -6,16 +6,18 @@ use React\Http\Middleware\RequestBodyBufferMiddleware;
 use React\Http\Middleware\RequestBodyParserMiddleware;
 use React\Http\Response;
 use React\Http\StreamingServer;
+use SAREhub\Commons\Misc\EnvironmentHelper;
 
 require "vendor/autoload.php";
 
 $loop = React\EventLoop\Factory::create();
-$instanceId = getenv("INSTANCE_ID");
+$instanceId = EnvironmentHelper::getVar("INSTANCE_ID");
+$limitConcurrentRequests = EnvironmentHelper::getVar("REACTPHP_LIMIT_CONCURRENT_REQUESTS", 20);
+
 $server = new StreamingServer([
-    new LimitConcurrentRequestsMiddleware(40),
-    new RequestBodyBufferMiddleware(5 * 1024 * 1024),
+    new LimitConcurrentRequestsMiddleware($limitConcurrentRequests),
+    new RequestBodyBufferMiddleware(2 * 1024 * 1024),
     new RequestBodyParserMiddleware(),
-    new LimitConcurrentRequestsMiddleware(1),
     function (ServerRequestInterface $request) use ($instanceId) {
         return new Response(200, ['Content-Type' => 'text/plain'], "Hello from instance: $instanceId\n");
     }
@@ -23,7 +25,7 @@ $server = new StreamingServer([
 
 $socket = new React\Socket\Server("0.0.0.0:9000", $loop, [
     "tcp_nodelay" => true,
-    "backlog" => 50
+    "backlog" => 20
 ]);
 
 $loop->addSignal(SIGTERM, $func = function ($signal) use ($loop, &$func) {

@@ -68,5 +68,6 @@ $(_subproject_test_create_haproxy): test_create_haproxy_%: test_init
 	@export APP_SERVICE=$*
 	bash bin/test/create_haproxy_stack.sh
 
+## Runs ab benchmark tests from file
 run_benchmark_tests:
 	bash bin/test/run_benchmark_tests.sh
