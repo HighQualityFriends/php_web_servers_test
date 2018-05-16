@@ -6,6 +6,11 @@ export VERSION = test
 export APP_IMAGE=$(IMAGE_NAMESPACE)/$(PROJECT)_$*:$(VERSION)
 export DEPLOY_USER ?= ubuntu
 
+export BENCHMARK_TESTS_FILE?=bin/test/benchmark_tests
+
+export BENCHMARK_COMMAND ?= 'ab'
+export BENCHMARK_TESTS_RESULT_FILE ?= "benchmark_tests_result.txt"
+
 HELP_TARGET_MAX_CHAR_NUM=30
 SUBPROJECTS = reactphp_ev reactphp_event phpfpm
 
@@ -62,3 +67,6 @@ $(_subproject_test_create_haproxy): test_create_haproxy_%: test_init
 	@export HAPROXY_STACK=test_haproxy
 	@export APP_SERVICE=$*
 	bash bin/test/create_haproxy_stack.sh
+
+run_benchmark_tests:
+	bash bin/test/run_benchmark_tests.sh

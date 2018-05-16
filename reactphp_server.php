@@ -12,7 +12,7 @@ require "vendor/autoload.php";
 $loop = React\EventLoop\Factory::create();
 $instanceId = getenv("INSTANCE_ID");
 $server = new StreamingServer([
-    new LimitConcurrentRequestsMiddleware(10),
+    new LimitConcurrentRequestsMiddleware(40),
     new RequestBodyBufferMiddleware(5 * 1024 * 1024),
     new RequestBodyParserMiddleware(),
     new LimitConcurrentRequestsMiddleware(1),
