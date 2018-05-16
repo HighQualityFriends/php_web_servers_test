@@ -63,7 +63,11 @@ resource "aws_instance" "benchmark_server" {
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
       "sudo bash /home/ubuntu/run_linux_tweaks.sh",
-      "sudo apt-get install -y apache2-utils mc",
+      "sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common git mc make apache2-utils",
+      "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
+      "sudo add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) edge\"",
+      "sudo apt-get update",
+      "sudo apt-get install -y docker-ce='18.05.0~ce~3-0~ubuntu'",
       "git clone --depth=1 https://github.com/HighQualityFriends/php_web_servers_test.git"
     ]
   }

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -e -u
-source $DOCKERUTILPATH;
 set -a;
 source $TESTENVPATH;
 set +a;
