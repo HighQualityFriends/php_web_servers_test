@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 echo "
-fs.file-max=2000000
+fs.file-max=10000000
 
 vm.swappiness=20
 vm.dirty_ratio=40
 vm.dirty_background_ratio=10
 
-net.core.somaxconn=50000
+net.core.somaxconn=100000
 net.core.netdev_max_backlog=40000
 
 net.ipv4.neigh.default.gc_thresh1=30000
@@ -46,13 +46,13 @@ echo 'never' > /sys/kernel/mm/transparent_hugepage/enabled
 echo 'never' > /sys/kernel/mm/transparent_hugepage/defrag
 
 echo "
-* soft     nproc          800000
-* hard     nproc          800000
-* soft     nofile         800000
-* hard     nofile         800000
-root soft     nproc          800000
-root hard     nproc          800000
-root soft     nofile         800000
-root hard     nofile         800000
+* soft     nproc          1000000
+* hard     nproc          1000000
+* soft     nofile         1000000
+* hard     nofile         1000000
+root soft     nproc          1000000
+root hard     nproc          1000000
+root soft     nofile         1000000
+root hard     nofile         1000000
 " >> /etc/security/limits.conf
 echo  'session required pam_limits.so' >> /etc/pam.d/common-session

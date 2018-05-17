@@ -12,7 +12,7 @@ require "vendor/autoload.php";
 
 $loop = React\EventLoop\Factory::create();
 $instanceId = EnvironmentHelper::getVar("INSTANCE_ID");
-$limitConcurrentRequests = EnvironmentHelper::getVar("REACTPHP_LIMIT_CONCURRENT_REQUESTS", 20);
+$limitConcurrentRequests = EnvironmentHelper::getVar("REACTPHP_LIMIT_CONCURRENT_REQUESTS", 50);
 
 $server = new StreamingServer([
     new LimitConcurrentRequestsMiddleware($limitConcurrentRequests),
@@ -25,7 +25,7 @@ $server = new StreamingServer([
 
 $socket = new React\Socket\Server("0.0.0.0:9000", $loop, [
     "tcp_nodelay" => true,
-    "backlog" => 20
+    "backlog" => 200
 ]);
 
 $loop->addSignal(SIGTERM, $func = function ($signal) use ($loop, &$func) {
