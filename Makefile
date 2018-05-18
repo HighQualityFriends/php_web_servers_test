@@ -8,7 +8,7 @@ export DEPLOY_USER ?= ubuntu
 
 export BENCHMARK_TESTS_FILE?=bin/test/benchmark_tests
 
-export BENCHMARK_COMMAND ?= 'ab'
+export BENCHMARK_COMMAND ?= ab
 export BENCHMARK_TESTS_RESULT_FILE ?= benchmark_tests_result.txt
 
 HELP_TARGET_MAX_CHAR_NUM=30
