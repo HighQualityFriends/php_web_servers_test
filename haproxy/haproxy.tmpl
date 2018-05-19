@@ -12,7 +12,7 @@ global
 
    ssl-default-server-options {{.SslBindOptions}}
    ssl-default-server-ciphers {{.SslBindCiphers}}
-   maxconn 800000
+   maxconn 500000
 
 resolvers docker
 {{- range .Resolvers}}
@@ -51,7 +51,7 @@ defaults
     timeout http-request {{.TimeoutHttpRequest}}s
     timeout http-keep-alive {{.TimeoutHttpKeepAlive}}s
 
-    maxconn 800000
+    maxconn 5000000
 
 {{.UserList}}
 {{.Stats}}
