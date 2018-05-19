@@ -55,7 +55,7 @@ docker service create --name proxy \
 docker service create \
     --name $APP_SERVICE \
     --with-registry-auth \
-    --replicas 5 \
+    --replicas $APP_REPLICAS \
     --restart-delay 10s \
     --restart-max-attempts 5 \
     --update-parallelism 0 \

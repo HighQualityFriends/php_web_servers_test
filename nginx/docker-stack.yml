@@ -55,7 +55,7 @@ services:
     deploy:
       endpoint_mode: dnsrr
       mode: replicated
-      replicas: 5
+      replicas: ${APP_REPLICAS}
       restart_policy:
         condition: any
         delay: 20s

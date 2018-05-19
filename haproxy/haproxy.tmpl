@@ -1,8 +1,8 @@
 global
    pidfile /var/run/haproxy.pid
    nbproc 1
-   nbthread 2
-   cpu-map auto:1/1-2 0-1
+   nbthread 4
+   cpu-map auto:1/1-4 0-3
 
    tune.ssl.default-dh-param 2048{{.ExtraGlobal}}
    tune.bufsize 16384
@@ -12,7 +12,7 @@ global
 
    ssl-default-server-options {{.SslBindOptions}}
    ssl-default-server-ciphers {{.SslBindCiphers}}
-   maxconn 500000
+   maxconn 1000000
 
 resolvers docker
 {{- range .Resolvers}}
